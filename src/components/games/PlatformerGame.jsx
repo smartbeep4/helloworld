@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import HamburgerMenu from './HamburgerMenu';
-import HomeButton from './HomeButton';
-import '../styles/PlatformerGame.css';
+import HamburgerMenu from '../ui/HamburgerMenu';
+import HomeButton from '../ui/HomeButton';
+import '../../styles/PlatformerGame.css';
 
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 400;
@@ -283,3 +283,4 @@ function PlatformerGame() {
 }
 
 export default PlatformerGame;
+

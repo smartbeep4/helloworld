@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/Launchpad.css';
+import '../../styles/Launchpad.css';
 
 function AppCard({ app }) {
   const navigate = useNavigate();

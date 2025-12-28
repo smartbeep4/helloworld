@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
-import '../styles/HamburgerMenu.css';
+import { getMenuItems } from '../../constants/routes';
+import '../../styles/HamburgerMenu.css';
 
 function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,10 +29,7 @@ function HamburgerMenu() {
     setIsOpen(!isOpen);
   };
 
-  const menuItems = [
-    { path: '/', label: 'Home', icon: '🏠' },
-    { path: '/snake', label: 'Snake Game', icon: '🐍' },
-  ];
+  const menuItems = getMenuItems();
 
   const handleNavigation = (path) => {
     navigate(path);

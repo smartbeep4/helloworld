@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import HamburgerMenu from './HamburgerMenu';
-import HomeButton from './HomeButton';
-import '../styles/SnakeGame.css';
+import HamburgerMenu from '../ui/HamburgerMenu';
+import HomeButton from '../ui/HomeButton';
+import '../../styles/SnakeGame.css';
 
 const GRID_SIZE = 20;
 const CELL_SIZE = 20;
