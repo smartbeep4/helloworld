@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HamburgerMenu from './HamburgerMenu';
+import HomeButton from './HomeButton';
 import '../styles/SnakeGame.css';
 
 const GRID_SIZE = 20;
@@ -206,6 +207,7 @@ function SnakeGame() {
   return (
     <div className="snake-game">
       <HamburgerMenu />
+      <HomeButton />
       <div className="snake-game-header">
         <div className="score">Score: {score}</div>
       </div>
