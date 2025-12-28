@@ -12,6 +12,13 @@ function Launchpad() {
       icon: '🐍',
       path: '/snake',
     },
+    {
+      id: 'platformer',
+      title: 'Platformer',
+      description: 'Side-scrolling platformer game - jump over obstacles!',
+      icon: '🏃',
+      path: '/platformer',
+    },
     // Future apps can be added here
   ];
 
