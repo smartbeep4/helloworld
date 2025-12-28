@@ -1,5 +1,6 @@
 import React from 'react';
 import AppCard from './AppCard';
+import HamburgerMenu from './HamburgerMenu';
 import '../styles/Launchpad.css';
 
 function Launchpad() {
@@ -16,6 +17,7 @@ function Launchpad() {
 
   return (
     <div className="launchpad">
+      <HamburgerMenu />
       <header className="launchpad-header">
         <h1 className="launchpad-title">🚀 Mini Apps Launchpad</h1>
         <p className="launchpad-subtitle">Select an app to get started</p>

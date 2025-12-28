@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import HamburgerMenu from './HamburgerMenu';
 import '../styles/SnakeGame.css';
 
 const GRID_SIZE = 20;
@@ -83,8 +84,18 @@ function SnakeGame() {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Get theme-aware colors
+    const root = document.documentElement;
+    const computedStyle = getComputedStyle(root);
+    const bgColor = computedStyle.getPropertyValue('--card-bg').trim();
+    const borderColor = computedStyle.getPropertyValue('--border-color').trim();
+    
+    // Draw background
+    ctx.fillStyle = bgColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
     // Draw grid
-    ctx.strokeStyle = '#e0e0e0';
+    ctx.strokeStyle = borderColor;
     ctx.lineWidth = 1;
     for (let i = 0; i <= GRID_SIZE; i++) {
       ctx.beginPath();
@@ -194,10 +205,8 @@ function SnakeGame() {
 
   return (
     <div className="snake-game">
+      <HamburgerMenu />
       <div className="snake-game-header">
-        <button className="back-button" onClick={() => navigate('/')}>
-          ← Back to Launchpad
-        </button>
         <div className="score">Score: {score}</div>
       </div>
 
