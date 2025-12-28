@@ -1,0 +1,95 @@
+.launchpad {
+  min-height: 100vh;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.launchpad-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: white;
+}
+
+.launchpad-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.launchpad-subtitle {
+  font-size: 1.25rem;
+  opacity: 0.9;
+}
+
+.launchpad-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.app-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 200px;
+  justify-content: center;
+}
+
+.app-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.app-card-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.app-card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.app-card-description {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .launchpad {
+    padding: 1rem;
+  }
+
+  .launchpad-title {
+    font-size: 2rem;
+  }
+
+  .launchpad-subtitle {
+    font-size: 1rem;
+  }
+
+  .launchpad-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .app-card {
+    padding: 1.5rem;
+  }
+}
+
