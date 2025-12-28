@@ -36,6 +36,7 @@
 .game-canvas {
   display: block;
   border-radius: 8px;
+  touch-action: none;
 }
 
 .game-overlay {

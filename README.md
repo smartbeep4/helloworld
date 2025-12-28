@@ -11,11 +11,19 @@ A React-based launchpad application that serves as a hub for mini-apps, starting
 
 - 🚀 **Launchpad Interface**: Clean, modern interface to browse and launch mini-apps
 - 🐍 **Snake Game**: Full-featured browser-based snake game with:
-  - Arrow key controls
+  - Arrow key controls (desktop)
+  - Swipe-to-navigate and tap-to-navigate (mobile)
   - Score tracking
   - Collision detection (walls and self)
   - Game over screen with restart functionality
   - Smooth gameplay
+
+- 🏃 **Platformer Game**: Fast-paced side-scrolling platformer with:
+  - Spacebar to jump (desktop)
+  - Tap-to-jump (mobile)
+  - Obstacle avoidance
+  - Score tracking
+  - Game over screen with restart functionality
 
 ## Tech Stack
 

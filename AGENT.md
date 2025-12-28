@@ -323,6 +323,150 @@ export default ComponentName;
 - **URL State**: React Router (`useLocation`, `useNavigate`)
 - **No Global State Library**: Intentionally simple; add Redux/Zustand only if needed
 
+## Mobile Touch Controls
+
+### Touch Event Handling Patterns
+
+For games requiring touch input, use the following patterns:
+
+#### Basic Touch Event Setup
+
+```javascript
+// Add refs for touch tracking
+const touchStartRef = useRef({ x: 0, y: 0 });
+const touchCurrentRef = useRef({ x: 0, y: 0 });
+const touchStartTimeRef = useRef(0);
+
+// Event handlers
+const handleTouchStart = (e) => {
+  e.preventDefault(); // Prevent default touch behaviors
+  const touch = e.touches[0];
+  const rect = canvas.getBoundingClientRect();
+  touchStartRef.current = {
+    x: touch.clientX - rect.left,
+    y: touch.clientY - rect.top
+  };
+  touchCurrentRef.current = { ...touchStartRef.current };
+  touchStartTimeRef.current = Date.now();
+};
+
+const handleTouchMove = (e) => {
+  e.preventDefault();
+  const touch = e.touches[0];
+  const rect = canvas.getBoundingClientRect();
+  touchCurrentRef.current = {
+    x: touch.clientX - rect.left,
+    y: touch.clientY - rect.top
+  };
+};
+
+const handleTouchEnd = (e) => {
+  e.preventDefault();
+  // Handle tap vs swipe logic here
+};
+
+// Attach listeners with passive: false to allow preventDefault()
+canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+```
+
+#### Swipe Detection Implementation
+
+```javascript
+const handleTouchEnd = (e) => {
+  e.preventDefault();
+
+  const touchDuration = Date.now() - touchStartTimeRef.current;
+  const deltaX = touchCurrentRef.current.x - touchStartRef.current.x;
+  const deltaY = touchCurrentRef.current.y - touchStartRef.current.y;
+  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+  // Swipe threshold (adjust as needed)
+  const SWIPE_THRESHOLD = 30;
+
+  if (distance > SWIPE_THRESHOLD) {
+    // Determine primary swipe direction
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      // Horizontal swipe
+      if (deltaX > 0) {
+        // Swipe right
+      } else {
+        // Swipe left
+      }
+    } else {
+      // Vertical swipe
+      if (deltaY > 0) {
+        // Swipe down
+      } else {
+        // Swipe up
+      }
+    }
+  }
+};
+```
+
+#### Tap-to-Navigate (Relative Positioning)
+
+For games where taps should control direction relative to a game element:
+
+```javascript
+const handleTouchEnd = (e) => {
+  // ... swipe detection code ...
+
+  const TAP_DURATION_THRESHOLD = 300;
+  const TAP_DISTANCE_THRESHOLD = 30;
+
+  if (distance < TAP_DISTANCE_THRESHOLD && touchDuration < TAP_DURATION_THRESHOLD) {
+    // It's a tap - calculate direction relative to game element
+    const elementX = gameElement.x * CELL_SIZE + CELL_SIZE / 2;
+    const elementY = gameElement.y * CELL_SIZE + CELL_SIZE / 2;
+    const tapX = touchStartRef.current.x;
+    const tapY = touchStartRef.current.y;
+
+    const deltaXFromElement = tapX - elementX;
+    const deltaYFromElement = tapY - elementY;
+
+    // Determine primary direction from tap position
+    if (Math.abs(deltaXFromElement) > Math.abs(deltaYFromElement)) {
+      if (deltaXFromElement > 0) {
+        // Tap right of element
+      } else {
+        // Tap left of element
+      }
+    } else {
+      if (deltaYFromElement > 0) {
+        // Tap below element
+      } else {
+        // Tap above element
+      }
+    }
+  }
+};
+```
+
+### Touch-Action CSS Property
+
+Always add `touch-action: none` to game canvases to prevent default touch behaviors:
+
+```css
+.game-canvas {
+  display: block;
+  border-radius: 8px;
+  touch-action: none; /* Prevents scrolling, zooming, etc. */
+}
+```
+
+### Best Practices for Mobile Game Controls
+
+1. **Passive Event Listeners**: Use `{ passive: false }` when calling `preventDefault()` in touch handlers
+2. **Touch-Action CSS**: Always set `touch-action: none` on interactive canvas elements
+3. **Coordinate Conversion**: Convert screen coordinates to canvas coordinates using `getBoundingClientRect()`
+4. **Direction Constraints**: Respect game rules (e.g., can't reverse snake direction immediately)
+5. **Thresholds**: Use appropriate thresholds for distinguishing taps from swipes
+6. **Game State**: Use touch events to start games when appropriate
+7. **Performance**: Avoid heavy calculations in touch event handlers
+
 ### Server Route Patterns
 
 **Adding a new API route:**

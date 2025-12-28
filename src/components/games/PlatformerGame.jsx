@@ -18,6 +18,7 @@ function PlatformerGame() {
   const canvasRef = useRef(null);
   const gameLoopRef = useRef(null);
   const keysRef = useRef({});
+  const touchStartTimeRef = useRef(0);
 
   const [player, setPlayer] = useState({
     x: 100,
@@ -33,6 +34,7 @@ function PlatformerGame() {
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [scrollX, setScrollX] = useState(0);
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   // Generate obstacles
   const generateObstacle = useCallback(() => {
@@ -191,6 +193,44 @@ function PlatformerGame() {
     };
   }, [gameStarted, gameOver]);
 
+  // Handle touch input
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleTouchStart = (e) => {
+      e.preventDefault();
+      touchStartTimeRef.current = Date.now();
+    };
+
+    const handleTouchEnd = (e) => {
+      e.preventDefault();
+      const touchDuration = Date.now() - touchStartTimeRef.current;
+
+      // Only handle short taps (< 300ms) as jumps
+      if (touchDuration < 300) {
+        // Start game on first tap if not started
+        if (!gameStarted && !gameOver) {
+          setGameStarted(true);
+        }
+
+        // Trigger jump (same as spacebar)
+        keysRef.current[' '] = true;
+        setTimeout(() => {
+          keysRef.current[' '] = false;
+        }, 100);
+      }
+    };
+
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+    canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+    return () => {
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      canvas.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [gameStarted, gameOver]);
+
   // Game loop
   useEffect(() => {
     if (gameOver || !gameStarted) return;
@@ -235,8 +275,8 @@ function PlatformerGame() {
 
   return (
     <div className="platformer-game">
-      <HamburgerMenu />
-      <HomeButton />
+      <HamburgerMenu onNavStateChange={setIsNavOpen} />
+      <HomeButton isNavOpen={isNavOpen} />
       <div className="platformer-game-header">
         <div className="score">Score: {score}</div>
       </div>

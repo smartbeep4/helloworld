@@ -16,12 +16,16 @@ function SnakeGame() {
   const gameLoopRef = useRef(null);
   const directionRef = useRef(INITIAL_DIRECTION);
   const nextDirectionRef = useRef(INITIAL_DIRECTION);
+  const touchStartRef = useRef({ x: 0, y: 0 });
+  const touchCurrentRef = useRef({ x: 0, y: 0 });
+  const touchStartTimeRef = useRef(0);
 
   const [snake, setSnake] = useState(INITIAL_SNAKE);
   const [food, setFood] = useState({ x: 15, y: 15 });
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
 
   // Generate random food position
   const generateFood = useCallback(() => {
@@ -173,6 +177,108 @@ function SnakeGame() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [gameOver, gameStarted]);
 
+  // Handle touch input
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleTouchStart = (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      touchStartRef.current = {
+        x: touch.clientX - rect.left,
+        y: touch.clientY - rect.top
+      };
+      touchCurrentRef.current = { ...touchStartRef.current };
+      touchStartTimeRef.current = Date.now();
+    };
+
+    const handleTouchMove = (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      touchCurrentRef.current = {
+        x: touch.clientX - rect.left,
+        y: touch.clientY - rect.top
+      };
+    };
+
+    const handleTouchEnd = (e) => {
+      e.preventDefault();
+
+      const touchDuration = Date.now() - touchStartTimeRef.current;
+      const deltaX = touchCurrentRef.current.x - touchStartRef.current.x;
+      const deltaY = touchCurrentRef.current.y - touchStartRef.current.y;
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+      const currentDir = directionRef.current;
+
+      // If significant movement (> 30px), treat as swipe
+      if (distance > 30) {
+        // Determine primary swipe direction
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          // Horizontal swipe
+          if (deltaX > 0 && currentDir.x === 0) {
+            nextDirectionRef.current = { x: 1, y: 0 }; // Right
+          } else if (deltaX < 0 && currentDir.x === 0) {
+            nextDirectionRef.current = { x: -1, y: 0 }; // Left
+          }
+        } else {
+          // Vertical swipe
+          if (deltaY > 0 && currentDir.y === 0) {
+            nextDirectionRef.current = { x: 0, y: 1 }; // Down
+          } else if (deltaY < 0 && currentDir.y === 0) {
+            nextDirectionRef.current = { x: 0, y: -1 }; // Up
+          }
+        }
+      } else if (touchDuration < 300) {
+        // Short touch with little movement = tap
+        // Calculate direction relative to snake head
+        const head = snake[0];
+        const headX = head.x * CELL_SIZE + CELL_SIZE / 2;
+        const headY = head.y * CELL_SIZE + CELL_SIZE / 2;
+        const tapX = touchStartRef.current.x;
+        const tapY = touchStartRef.current.y;
+
+        const deltaXFromHead = tapX - headX;
+        const deltaYFromHead = tapY - headY;
+
+        // Determine primary direction from tap position relative to head
+        if (Math.abs(deltaXFromHead) > Math.abs(deltaYFromHead)) {
+          // Tap is more horizontal relative to head
+          if (deltaXFromHead > 0 && currentDir.x === 0) {
+            nextDirectionRef.current = { x: 1, y: 0 }; // Right of head
+          } else if (deltaXFromHead < 0 && currentDir.x === 0) {
+            nextDirectionRef.current = { x: -1, y: 0 }; // Left of head
+          }
+        } else {
+          // Tap is more vertical relative to head
+          if (deltaYFromHead > 0 && currentDir.y === 0) {
+            nextDirectionRef.current = { x: 0, y: 1 }; // Below head
+          } else if (deltaYFromHead < 0 && currentDir.y === 0) {
+            nextDirectionRef.current = { x: 0, y: -1 }; // Above head
+          }
+        }
+      }
+
+      // Start game if not started
+      if (!gameStarted && !gameOver) {
+        setGameStarted(true);
+      }
+    };
+
+    canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+    canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+
+    return () => {
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [gameOver, gameStarted, snake]);
+
   // Game loop effect
   useEffect(() => {
     if (gameOver || !gameStarted) return;
@@ -206,8 +312,8 @@ function SnakeGame() {
 
   return (
     <div className="snake-game">
-      <HamburgerMenu />
-      <HomeButton />
+      <HamburgerMenu onNavStateChange={setIsNavOpen} />
+      <HomeButton isNavOpen={isNavOpen} />
       <div className="snake-game-header">
         <div className="score">Score: {score}</div>
       </div>
