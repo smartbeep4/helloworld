@@ -8,7 +8,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 12px;
@@ -18,10 +17,9 @@
   backdrop-filter: blur(10px);
   padding: 0;
   opacity: 1;
-  transform: scale(1);
 }
 
-.home-button:hover:not(.fading) {
+.home-button:hover {
   background: var(--bg-secondary);
   box-shadow: var(--shadow-hover);
   transform: scale(1.05);
@@ -31,12 +29,8 @@
   transform: scale(0.95);
 }
 
-.home-button.fading {
-  width: auto;
-  min-width: 48px;
-  padding: 0 1rem;
+.home-button.hidden {
   opacity: 0;
-  transform: scale(0.95);
   pointer-events: none;
 }
 
@@ -47,16 +41,7 @@
   transition: color 0.2s ease;
 }
 
-.home-text {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text);
-  transition: color 0.2s ease;
-  white-space: nowrap;
-}
-
-.home-button:hover:not(.fading) .home-icon,
-.home-button:hover:not(.fading) .home-text {
+.home-button:hover .home-icon {
   color: var(--primary);
 }
 
@@ -68,16 +53,7 @@
     height: 44px;
   }
 
-  .home-button.fading {
-    min-width: 44px;
-    padding: 0 0.75rem;
-  }
-
   .home-icon {
     font-size: 1.25rem;
-  }
-
-  .home-text {
-    font-size: 0.9rem;
   }
 }

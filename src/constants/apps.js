@@ -36,6 +36,14 @@ export const APPS = [
     path: ROUTES.PLATFORMER,
     category: 'games',
   },
+  {
+    id: 'blogger',
+    title: 'Knowledge Blog',
+    description: 'Read insightful articles and tutorials',
+    icon: '📚',
+    path: ROUTES.BLOGGER,
+    category: 'knowledge',
+  },
   // Future apps can be added here
 ];
 

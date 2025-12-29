@@ -7,6 +7,7 @@ export const ROUTES = {
   HOME: '/',
   SNAKE: '/snake',
   PLATFORMER: '/platformer',
+  BLOGGER: '/blogger',
 };
 
 /**
@@ -31,6 +32,11 @@ export const ROUTE_METADATA = {
   [ROUTES.PLATFORMER]: {
     label: 'Platformer',
     icon: '🏃',
+    showInMenu: true,
+  },
+  [ROUTES.BLOGGER]: {
+    label: 'Knowledge Blog',
+    icon: '📚',
     showInMenu: true,
   },
 };

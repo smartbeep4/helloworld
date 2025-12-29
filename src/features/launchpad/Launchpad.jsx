@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AppCard from '../../components/ui/AppCard';
 import HamburgerMenu from '../../components/ui/HamburgerMenu';
+import HomeButton from '../../components/ui/HomeButton';
 import { getAppsByCategory, getCategoryMetadata } from '../../constants/apps';
 import '../../styles/Launchpad.css';
 
@@ -12,6 +13,7 @@ function Launchpad() {
   return (
     <div className="launchpad">
       <HamburgerMenu onNavStateChange={setIsNavOpen} />
+      <HomeButton isNavOpen={isNavOpen} />
       <header className="launchpad-header">
         <h1 className="launchpad-title">🚀 Mini Apps Launchpad</h1>
         <p className="launchpad-subtitle">Select an app to get started</p>

@@ -90,6 +90,14 @@ function HamburgerMenu({ onNavStateChange }) {
       {/* Slide-out Navigation Pane */}
       <nav className={`nav-pane ${isOpen ? 'open' : ''}`}>
         <div className="nav-pane-content">
+          {/* Nav Pane Header */}
+          <div className="nav-pane-header">
+            <div className="nav-pane-header-content">
+              <span className="nav-pane-header-icon">🏠</span>
+              <span className="nav-pane-header-text">SmartApps</span>
+            </div>
+          </div>
+          
           {/* Navigation Items */}
           <div className="nav-menu">
             <h2 className="nav-menu-title">Apps</h2>
